@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kiwi</title>
+</head>
+
+<body>
+    <div class="kiwi-imagem">
+        <img src="kiwi.png" class="kiwi" alt="kiwi">
+    </div>
+</body>
+
+<style>
+
+body, html {
+  height: 100%;
+  background-color: black;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.kiwi-imagem{
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.gelatine {
+  animation: gelatine 0.5s;
+}
+@keyframes gelatine {
+  from, to { transform: scale(1, 1); }
+  25% { transform: scale(0.9, 1.1); }
+  50% { transform: scale(1.1, 0.9); }
+  75% { transform: scale(0.95, 1.05); }
+}
+
+</style>
+
+<script>
+    const kiwi = document.querySelector(".kiwi")
+
+    function kiwifunc() {
+        kiwi.classList.add("gelatine")
+        setTimeout(()=>{
+            kiwi.classList.remove("gelatine")
+        }, 500)
+    }
+
+    document.addEventListener("click", (event)=>{
+        kiwifunc()
+    })
+
+    document.addEventListener("load", kiwifunc())
+
+    //   https://armandocanals.com/posts/CSS-transform-rotating-a-3D-object-perspective-based-on-mouse-position.html 
+    let constrain = 120;
+
+    function transforms(x, y, el) {
+        let box = el.getBoundingClientRect();
+        let calcX = -(y - box.y - (box.height / 2)) / constrain;
+        let calcY = (x - box.x - (box.width / 2)) / constrain;
+        
+        return "perspective(100px) "
+            + "   rotateX("+ calcX +"deg) "
+            + "   rotateY("+ calcY +"deg) ";
+    };
+
+    function transformElement(el, xyEl) {
+        kiwi.style.transform  = transforms.apply(null, xyEl);
+    }
+
+    document.onmousemove = function(e) {
+        let xy = [e.clientX, e.clientY];
+        let position = xy.concat([kiwi]);
+        window.requestAnimationFrame(function(){
+            transformElement(kiwi, position);
+        });
+    };
+</script>
+
+</html>
